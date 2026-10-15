@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grammar Test Ilovasi</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 480px;
+            background: #ffffff;
+            min-height: 100vh;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        @media (min-width: 481px) {
+            .app-container {
+                min-height: 85vh;
+                border-radius: 16px;
+            }
+        }
+
+        header {
+            background-color: #2563eb;
+            color: white;
+            padding: 16px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .content {
+            padding: 16px;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        /* HomeScreen Styles */
+        .home-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 12px;
+            color: #1e293b;
+        }
+
+        .level-card {
+            padding: 18px;
+            border-radius: 14px;
+            color: white;
+            margin-bottom: 14px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.08);
+            transition: transform 0.1s ease;
+        }
+
+        .level-card:active {
+            transform: scale(0.98);
+        }
+
+        .level-info h3 {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+
+        .level-info p {
+            font-size: 12px;
+            opacity: 0.9;
+            margin-bottom: 8px;
+        }
+
+        .badge {
+            background: rgba(255, 255, 255, 0.25);
+            padding: 3px 10px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 500;
+            display: inline-block;
+        }
+
+        .arrow {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        /* QuizScreen Styles */
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            font-weight: bold;
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .question-box {
+            background-color: #eff6ff;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #1e3a8a;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+
+        .option-btn {
+            width: 100%;
+            background: #ffffff;
+            border: 2px solid #e2e8f0;
+            padding: 14px 16px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            text-align: left;
+            font-size: 15px;
+            font-weight: 500;
+            color: #1e293b;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background: #f8fafc;
+            border-color: #cbd5e1;
+        }
+
+        .option-btn.correct {
+            background-color: #86efac !important;
+            border-color: #22c55e !important;
+            color: #14532d !important;
+        }
+
+        .option-btn.incorrect {
+            background-color: #fca5a5 !important;
+            border-color: #ef4444 !important;
+            color: #7f1d1d !important;
+        }
+
+        /* ResultScreen Styles */
+        .result-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+
+        .result-score {
+            font-size: 32px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .result-score.success { color: #16a34a; }
+        .result-score.warning { color: #ea580c; }
+
+        .analysis-item {
+            border: 1.5px solid #cbd5e1;
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 14px;
+            background: #ffffff;
+        }
+
+        .analysis-item.correct { border-color: #22c55e; }
+        .analysis-item.incorrect { border-color: #ef4444; }
+
+        .analysis-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+            font-size: 12px;
+            color: #64748b;
+            font-weight: bold;
+        }
+
+        .status-chip {
+            padding: 2px 8px;
+            border-radius: 6px;
+            color: white;
+            font-size: 11px;
+        }
+        .status-chip.correct { background-color: #22c55e; }
+        .status-chip.incorrect { background-color: #ef4444; }
+
+        .analysis-q-text {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .analysis-answer {
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .explanation-box {
+            background: #eff6ff;
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 8px;
+            font-size: 13px;
+            color: #1e3a8a;
+        }
+
+        .btn-primary {
+            width: 100%;
+            background-color: #2563eb;
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .btn-primary:active {
+            background-color: #1d4ed8;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <header id="app-header">Grammar</header>
+    
+    <div class="content" id="app-content">
+        <!-- Dinamik kontent shu yerga yuklanadi -->
+    </div>
+</div>
+
+<script>
+    // Ma'lumotlar bazasi
+    const levelsData = [
+        {
+            title: "A1 - Beginner",
+            subtitle: "Boshlang'ich iboralar va sodda grammatika",
+            color: "#38bdf8",
+            questions: [
+                { id: "a1_1", level: "A1", topic: "To Be", questionText: "She ___ a doctor.", options: ["am", "is", "are", "be", "been"], correctIndex: 1, explanation: "'She' uchinchi shaxs birlik bo'lgani uchun 'is' ishlatiladi." },
+                { id: "a1_2", level: "A1", topic: "Articles", questionText: "I have ___ apple.", options: ["a", "an", "the", "some", "-"], correctIndex: 1, explanation: "Unli tovushdan oldin 'an' ishlatiladi." },
+                { id: "a1_3", level: "A1", topic: "Present Simple", questionText: "They ___ football.", options: ["plays", "play", "playing", "played", "is play"], correctIndex: 1, explanation: "'They' ko'plik shaxs, shuning uchun fe'l o'zgarmasdan 'play' bo'ladi." },
+                { id: "a1_4", level: "A1", topic: "Pronouns", questionText: "Give the book to ___.", options: ["I", "he", "me", "my", "she"], correctIndex: 2, explanation: "Fe'ldan keyin obyekt olmoshi ('me') ishlatiladi." }
+            ]
+        },
+        {
+            title: "A2 - Elementary",
+            subtitle: "Kundalik muloqot va asosiy zamonlar",
+            color: "#2563eb",
+            questions: [
+                { id: "a2_1", level: "A2", topic: "Past Simple", questionText: "Yesterday, I ___ a new car.", options: ["buy", "buys", "bought", "buying", "have bought"], correctIndex: 2, explanation: "'Buy' fe'lining o'tgan zamon shakli 'bought' hisoblanadi." },
+                { id: "a2_2", level: "A2", topic: "Past Questions", questionText: "___ you go to the cinema?", options: ["Do", "Did", "Were", "Are", "Have"], correctIndex: 1, explanation: "Past Simple so'roq shaklida 'Did' yordamchi fe'li ishlatiladi." },
+                { id: "a2_3", level: "A2", topic: "Comparatives", questionText: "My car is ___ than yours.", options: ["fast", "faster", "fastest", "more fast", "most fast"], correctIndex: 1, explanation: "Qiyosiy darajada '-er' va 'than' qo'llaniladi." },
+                { id: "a2_4", level: "A2", topic: "Future Plans", questionText: "Look at the clouds! It ___ rain.", options: ["will", "is going to", "shall", "rains", "would"], correctIndex: 1, explanation: "Aniq vizual dalil bo'lganda 'is going to' ishlatiladi." }
+            ]
+        },
+        {
+            title: "B1 - Intermediate",
+            subtitle: "O'rta darajadagi struktura va bog'lovchilar",
+            color: "#14b8a6",
+            questions: [
+                { id: "b1_1", level: "B1", topic: "Present Perfect Continuous", questionText: "She is tired because she ___ for three hours.", options: ["has been running", "runs", "is running", "ran", "had run"], correctIndex: 0, explanation: "Hozirgacha davom etib natijasi ko'rinib turgan harakat uchun 'has been running' ishlatiladi." },
+                { id: "b1_2", level: "B1", topic: "Past Perfect", questionText: "When we arrived, the train ___.", options: ["left", "had already left", "has left", "was leaving", "leaves"], correctIndex: 1, explanation: "O'tgan zamondagi bir harakatdan oldin sodir bo'lgan ish uchun Past Perfect ishlatiladi." },
+                { id: "b1_3", level: "B1", topic: "Second Conditional", questionText: "If I ___ a million dollars, I would buy a house.", options: ["have", "had", "would have", "will have", "had had"], correctIndex: 1, explanation: "Second Conditional shart qismida Past Simple ('had') ishlatiladi." },
+                { id: "b1_4", level: "B1", topic: "Reported Speech", questionText: "'I am living in London,' he said. -> He said he ___ in London.", options: ["is living", "was living", "has lived", "had lived", "lived"], correctIndex: 1, explanation: "O'zlashtirma gapda zamon bir zinapoya ortga suriladi (Present Continuous -> Past Continuous)." }
+            ]
+        },
+        {
+            title: "B2 - Upper-Intermediate",
+            subtitle: "Murakkab zamonlar va gipotezalar",
+            color: "#4f46e5",
+            questions: [
+                { id: "b2_1", level: "B2", topic: "Mixed Conditionals", questionText: "If I had taken that job, I ___ in Tokyo now.", options: ["would be living", "would have lived", "will live", "lived", "had lived"], correctIndex: 0, explanation: "O'tmishdagi shartning hozirgi oqibati uchun 'would be + V-ing' ishlatiladi." },
+                { id: "b2_2", level: "B2", topic: "Inversion", questionText: "Hardly ___ at the station when the train left.", options: ["had I arrived", "I had arrived", "did I arrive", "I arrived", "was I arriving"], correctIndex: 0, explanation: "Inkor ravish boshida kelganda inversiya ('had I arrived') hosil bo'ladi." },
+                { id: "b2_3", level: "B2", topic: "Past Modals", questionText: "You ___ the email yesterday; now it's too late.", options: ["should send", "should have sent", "must send", "could send", "would send"], correctIndex: 1, explanation: "O'tmishda bajarilishi kerak bo'lib qolgan ish uchun 'should have + V3' ishlatiladi." },
+                { id: "b2_4", level: "B2", topic: "Subjunctive", questionText: "The doctor recommended that he ___ a week off.", options: ["takes", "take", "took", "has taken", "would take"], correctIndex: 1, explanation: "'Recommend' dan keyin Subjunctive mood bo'lib, fe'l o'zgarmas shaklda ('take') keladi." }
+            ]
+        },
+        {
+            title: "C1 - Advanced",
+            subtitle: "Chuqurlashtirilgan struktura va Inversion",
+            color: "#7c3aed",
+            questions: [
+                { id: "c1_1", level: "C1", topic: "Conditional Inversion", questionText: "___ known about the changes earlier, we would have adjusted.", options: ["Had we", "If we had", "Were we to", "Should we", "Did we"], correctIndex: 0, explanation: "Uchinchi conditionalda 'if' tushib qolganda inversiya ('Had we') yuzaga keladi." },
+                { id: "c1_2", level: "C1", topic: "Inversion", questionText: "Little ___ how much effort had gone into the project.", options: ["did he realize", "he realized", "he did realize", "had he realized", "was he realizing"], correctIndex: 0, explanation: "'Little' ravishi boshida kelganda o'tgan zamonda inversiya ('did he realize') sodir bo'ladi." },
+                { id: "c1_3", level: "C1", topic: "Advanced Passive", questionText: "He resent ___ treated like an amateur.", options: ["being", "to be", "having been", "be", "been"], correctIndex: 0, explanation: "'Resent' fe'lidan keyin majhul nisbatdagi Gerund ('being') qo'llaniladi." },
+                { id: "c1_4", level: "C1", topic: "Fronting", questionText: "On the top of the hill ___ an ancient castle.", options: ["stood", "did stand", "standing", "was stood", "has stood"], correctIndex: 0, explanation: "O'rin-joy predlogli ibora boshga o'tganda fe'l egadan oldinga o'tib inversiya qiladi." }
+            ]
+        },
+        {
+            title: "C2 - Proficiency",
+            subtitle: "Oliy darajadagi akademik grammatika",
+            color: "#6b21a8",
+            questions: [
+                { id: "c2_1", level: "C2", topic: "Inversion & Subjunctive", questionText: "___ it ever so humble, there is no place like home.", options: ["Be", "Were", "Is", "Should", "Had"], correctIndex: 0, explanation: "Eski Subjunctive yapilarda 'Be it ever so...' iborasi fe'lning boshlang'ich shaklida bo'ladi." },
+                { id: "c2_2", level: "C2", topic: "Conditional Inversion", questionText: "___ for your timely intervention, the company would have faced bankruptcy.", options: ["Had it not been", "Were it not", "If it had not", "Should it not be", "Had not it been"], correctIndex: 0, explanation: "3-conditional o'ta rasmiy inversiyasi 'Had it not been for' shaklida bo'ladi." },
+                { id: "c2_3", level: "C2", topic: "Inversion for Emphasis", questionText: "So intense ___ the heat that the tarmac melted.", options: ["was", "did", "had", "became", "seemed"], correctIndex: 0, explanation: "'So + Adjective' boshga kelganda 'To be' fe'li inversiyaga uchraydi ('So intense was')."},
+                { id: "c2_4", level: "C2", topic: "Formulaic Subjunctive", questionText: "___ it to say, the whole operation was a success.", options: ["Suffice", "Suffices", "Sufficing", "Sufficed", "To suffice"], correctIndex: 0, explanation: "'Suffice it to say' turg'un akademik ibora bo'lib, Subjunctive shaklida 'Suffice' ishlatiladi." }
+            ]
+        },
+        {
+            title: "Umumiy Test",
+            subtitle: "A1-C2 darajalardan aralash testlar",
+            color: "#f97316",
+            questions: [
+                { id: "gen_1", level: "A1", topic: "To Be", questionText: "She ___ a designer.", options: ["am", "is", "are", "be", "been"], correctIndex: 1, explanation: "'She' uchun 'is' ishlatiladi." },
+                { id: "gen_2", level: "A2", topic: "Past Simple", questionText: "Yesterday, I ___ to London.", options: ["go", "goes", "went", "gone", "was go"], correctIndex: 2, explanation: "'Go' fe'lining o'tgan zamon shakli 'went'." },
+                { id: "gen_3", level: "B1", topic: "Present Perfect Continuous", questionText: "He ___ for three hours.", options: ["has been running", "runs", "is running", "ran", "had run"], correctIndex: 0, explanation: "Uzoq davom etgan harakat uchun 'has been running' ishlatiladi." },
+                { id: "gen_4", level: "B2", topic: "Third Conditional", questionText: "If I had known, I ___ you.", options: ["would help", "would have helped", "will help", "helped", "had helped"], correctIndex: 1, explanation: "Third Conditional asosiy qismida 'would have + V3' ishlatiladi." },
+                { id: "gen_5", level: "C1", topic: "Conditional Inversion", questionText: "___ we known earlier, we would have acted.", options: ["Had we", "If we had", "Were we", "Should we", "Did we"], correctIndex: 0, explanation: "Uchinchi conditionalda inversiya 'Had we' shaklida bo'ladi." },
+                { id: "gen_6", level: "C2", topic: "Inversion", questionText: "At no time ___ compromise our principles.", options: ["did we", "we did", "we were", "had we", "were we"], correctIndex: 0, explanation: "'At no time' inkor iborasi boshida kurganda o'tgan zamonda inversiya ('did we') sodir bo'ladi." }
+            ]
+        }
+    ];
+
+    let currentLevel = null;
+    let currentQuestionIndex = 0;
+    let userAnswers = [];
+    let timerInterval = null;
+    let secondsElapsed = 0;
+    let isAnswered = false;
+
+    const headerEl = document.getElementById('app-header');
+    const contentEl = document.getElementById('app-content');
+
+    function renderHomeScreen() {
+        headerEl.innerText = "Grammar";
+        let html = `<div class="home-title">Darajangizni tanlang:</div>`;
+        
+        levelsData.forEach((level, index) => {
+            html += `
+                <div class="level-card" style="background-color: ${level.color};" onclick="startQuiz(${index})">
+                    <div class="level-info">
+                        <h3>${level.title}</h3>
+                        <p>${level.subtitle}</p>
+                        <div class="badge">${level.questions.length} ta savol</div>
+                    </div>
+                    <div class="arrow">&gt;</div>
+                </div>
+            `;
+        });
+        contentEl.innerHTML = html;
+    }
+
+    function startQuiz(levelIndex) {
+        currentLevel = levelsData[levelIndex];
+        currentQuestionIndex = 0;
+        userAnswers = [];
+        secondsElapsed = 0;
+        isAnswered = false;
+
+        headerEl.innerText = currentLevel.title;
+        renderQuizScreen();
+
+        if (timerInterval) clearInterval(timerInterval);
+        timerInterval = setInterval(() => {
+            secondsElapsed++;
+            const timerEl = document.getElementById('timer-display');
+            if (timerEl) {
+                timerEl.innerText = formatTime(secondsElapsed);
+            }
+        }, 1000);
+    }
+
+    function formatTime(totalSeconds) {
+        const minutes = Math.floor(totalSeconds / 60);
+        const seconds = totalSeconds % 60;
+        return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    }
+
+    function renderQuizScreen() {
+        const q = currentLevel.questions[currentQuestionIndex];
+        isAnswered = false;
+
+        let optionsHtml = '';
+        q.options.forEach((opt, idx) => {
+            const letter = String.fromCharCode(65 + idx);
+            optionsHtml += `<button class="option-btn" id="opt-${idx}" onclick="handleOptionSelect(${idx})">${letter}. ${opt}</button>`;
+        });
+
+        contentEl.innerHTML = `
+            <div class="quiz-header">
+                <span>Savol: ${currentQuestionIndex + 1} / ${currentLevel.questions.length}</span>
+                <span>⏱ <span id="timer-display">${formatTime(secondsElapsed)}</span></span>
+            </div>
+            <div class="question-box">${q.questionText}</div>
+            <div id="options-container">${optionsHtml}</div>
+        `;
+    }
+
+    function handleOptionSelect(selectedIndex) {
+        if (isAnswered) return;
+        isAnswered = true;
+
+        const q = currentLevel.questions[currentQuestionIndex];
+        userAnswers.push({ question: q, selectedIndex: selectedIndex });
+
+        // Tugmalarni ranglash
+        q.options.forEach((_, idx) => {
+            const btn = document.getElementById(`opt-${idx}`);
+            btn.disabled = true;
+            if (idx === q.correctIndex) {
+                btn.classList.add('correct');
+            } else if (idx === selectedIndex) {
+                btn.classList.add('incorrect');
+            }
+        });
+
+        setTimeout(() => {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < currentLevel.questions.length) {
+                renderQuizScreen();
+            } else {
+                clearInterval(timerInterval);
+                renderResultScreen();
+            }
+        }, 2000);
+    }
+
+    function renderResultScreen() {
+        headerEl.innerText = "Test Natijalari va Tahlil";
+        
+        let correctCount = userAnswers.filter(a => a.selectedIndex === a.question.correctIndex).length;
+        let total = userAnswers.length;
+        let percentage = (correctCount / total) * 100;
+        let scoreClass = percentage >= 70 ? "success" : "warning";
+
+        let html = `
+            <div class="result-card">
+                <div style="font-weight: bold; font-size: 18px;">Umumiy Natija</div>
+                <div class="result-score ${scoreClass}">${correctCount} / ${total}</div>
+                <div style="color: #64748b; font-size: 14px;">Ketgan vaqt: ${formatTime(secondsElapsed)}</div>
+            </div>
+            <div style="font-weight: bold; font-size: 16px; margin-bottom: 10px;">Savollar Tahlili:</div>
+        `;
+
+        userAnswers.forEach((item, index) => {
+            const q = item.question;
+            const isCorrect = item.selectedIndex === q.correctIndex;
+            const cardClass = isCorrect ? "correct" : "incorrect";
+            const chipClass = isCorrect ? "correct" : "incorrect";
+            const chipText = isCorrect ? "To'g'ri" : "Xato";
+
+            html += `
+                <div class="analysis-item ${cardClass}">
+                    <div class="analysis-header">
+                        <span>Savol ${index + 1} (${q.topic})</span>
+                        <span class="status-chip ${chipClass}">${chipText}</span>
+                    </div>
+                    <div class="analysis-q-text">${q.questionText}</div>
+                    <div class="analysis-answer">
+                        <strong>Sizning javobingiz:</strong> 
+                        <span style="color: ${isCorrect ? '#16a34a' : '#dc2626'}; font-weight: bold;">
+                            ${String.fromCharCode(65 + item.selectedIndex)}. ${q.options[item.selectedIndex]}
+                        </span>
+                    </div>
+            `;
+
+            if (!isCorrect) {
+                html += `
+                    <div class="analysis-answer">
+                        <strong>To'g'ri javob:</strong> 
+                        <span style="color: #16a34a; font-weight: bold;">
+                            ${String.fromCharCode(65 + q.correctIndex)}. ${q.options[q.correctIndex]}
+                        </span>
+                    </div>
+                `;
+            }
+
+            html += `
+                    <div class="explanation-box">
+                        <strong>Grammatik Tahlil:</strong><br>${q.explanation}
+                    </div>
+                </div>
+            `;
+        });
+
+        html += `<button class="btn-primary" onclick="renderHomeScreen()">Bosh sahifaga qaytish</button>`;
+        contentEl.innerHTML = html;
+    }
+
+    // Ilovani ishga tushirish
+    renderHomeScreen();
+</script>
+
+</body>
+</html>
+     
